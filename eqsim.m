@@ -1,7 +1,7 @@
 function [dy,y]=eqsim(y,t,newdt)
 global g0 A B C Ad Bd xk uk Pk Q GQ R H I ntamos xest t  r0 
 global derivative g_two error i_error
-global u control_dt control_time
+global u control_dt control_time u_ref u_0
 
 kp = 22.367279999999997;
 td = 0.47786767099084015;
@@ -13,12 +13,11 @@ g_r = tf(g_two*g_one);
 w=sqrt(g0)*randn(1,1);
 r=sqrt(r0)*randn(1,1);
 
-u_ref = pi/4;
 error = u_ref - y(1);
 disp(error)
 
 if control_time < t
-   u = kp*error + kp*td*derivative + ki*i_error; 
+   u = kp*error + kp*td*derivative + ki*i_error - u_0; 
    if u > 20
     u = 20;
     end
@@ -28,7 +27,7 @@ if control_time < t
     control_time = control_time + control_dt;
 end
     
-dy=A*[sin(y(1)) y(2)]'+B*u;
+dy=A*[error y(2)]'+B*u;
 derivative = -dy(1);
 
 z=C*y(1:2)';
