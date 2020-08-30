@@ -5,12 +5,13 @@ close all
 % Q: Matriz Q deve ser adaptada
 
 global g0 A B C D Ad Bd Cd Dd xk uk Pk Q GQ R H I ntamos tamos ct xest dt t  Gama Gamad Gamad0 r0 k l m g T F T0 
-global derivative g_two i_error counter u control_dt control_time
+global derivative g_two i_error counter u control_dt control_time u_ref u_0
     
 tf_l=30;            %tempo final da simulação
 dt=.1;              %intervalo de integração   
 control_dt=.2;      %intervalo de controle
 control_time=2;     %tempo da ultima execucao do controle
+u_ref = pi/2;       %Posição angular de referencia
 nsis=2;             %n de dy em equisim
 naux=2;             %n de  y em equisim
 t=0;
@@ -45,8 +46,11 @@ alpha_2 = 1;
 alpha_1 = 3*l*m*g/2;
 g_two = tf([1], [alpha_3 alpha_2 -alpha_1]);
 
-A=[0 1; alpha_1/alpha_3 -alpha_2/alpha_3];
+% aplica-se a linearização em torno de u_ref
+A=[0 1; alpha_1*(cos(u_ref))/alpha_3 -alpha_2/alpha_3];
 B=[0;1/alpha_3];
+
+u_0 = alpha_1*(sin(u_ref));
 
 %A = [A 0; 0 0 1];
 %B = [B 0];
