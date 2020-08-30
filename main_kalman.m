@@ -5,18 +5,19 @@ close all
 % Q: Matriz Q deve ser adaptada
 
 global g0 A B C D Ad Bd Cd Dd xk uk Pk Q GQ R H I ntamos tamos ct xest dt t  Gama Gamad Gamad0 r0 k l m g T F T0 
-global derivative g_two i_error counter u control_dt control_time
+global derivative g_two i_error counter u control_dt control_time error_list
     
 tf_l=30;            %tempo final da simulação
 dt=.1;              %intervalo de integração   
 control_dt=.2;      %intervalo de controle
-control_time=2;     %tempo da ultima execucao do controle
+control_time=0.2;     %tempo da ultima execucao do controle
 nsis=2;             %n de dy em equisim
 naux=2;             %n de  y em equisim
 t=0;
 nf=tf_l/dt;
 counter = 0;
 u = 0;
+error_list = [];
 
 m = 2;                %%%%%%%%%% MASSA KG
 M = 20;               %%%%%%%%%% MASSA KG

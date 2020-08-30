@@ -1,11 +1,12 @@
 function [dy,y]=eqsim(y,t,newdt)
 global g0 A B C Ad Bd xk uk Pk Q GQ R H I ntamos xest t  r0 
-global derivative g_two error i_error
+global derivative g_two error i_error error_list
 global u control_dt control_time
 
 kp = 22.367279999999997;
 td = 0.47786767099084015;
 ki = 8.914619681665144;
+N = 100;
 
 g_one = tf([td 1]);
 g_r = tf(g_two*g_one);
@@ -15,10 +16,15 @@ r=sqrt(r0)*randn(1,1);
 
 u_ref = pi/4;
 error = u_ref - y(1);
+error_list = cat(2, error_list, [error]);
 disp(error)
 
 if control_time < t
-   u = kp*error + kp*td*derivative + ki*i_error; 
+   %u = kp*error + kp*td*derivative + ki*i_error; 
+   k = length(error_list);
+   integral = sum(error_list);
+   u = kp*(error_list(k) + (control_dt/ki)*integral + (td/control_dt)*(error_list(k) - error_list(k-1)));
+   
    if u > 20
     u = 20;
     end
