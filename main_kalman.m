@@ -6,6 +6,7 @@ close all
 
 global g0 A B C D Ad Bd Cd Dd xk uk Pk Q GQ R H I ntamos tamos ct xest dt t  Gama Gamad Gamad0 r0 k l m g T F T0 
 global derivative g_two i_error counter u control_dt control_time u_ref u_0
+global error_list
     
 tf_l=30;            %tempo final da simulação
 dt=.1;              %intervalo de integração   
@@ -18,6 +19,14 @@ t=0;
 nf=tf_l/dt;
 counter = 0;
 u = 0;
+
+
+y(1)=pi/2; %condições iniciais
+y(2)=0; %condições iniciais
+y(3)=0; %condições iniciais
+y(4)=0;
+
+error_list = [u_ref-y(1)];
 
 m = 2;                %%%%%%%%%% MASSA KG
 M = 20;               %%%%%%%%%% MASSA KG
@@ -47,7 +56,7 @@ alpha_1 = 3*l*m*g/2;
 g_two = tf([1], [alpha_3 alpha_2 -alpha_1]);
 
 % aplica-se a linearização em torno de u_ref
-A=[0 1; alpha_1*(cos(u_ref))/alpha_3 -alpha_2/alpha_3];
+A=[0 1; alpha_1/alpha_3 -alpha_2/alpha_3];
 B=[0;1/alpha_3];
 
 u_0 = alpha_1*(sin(u_ref));
@@ -91,11 +100,6 @@ R=g0*eye(1);
 Gamad=[0 Gamad0(1,1) zeros(1,2); 0 Gamad0(2,1) zeros(1,2); zeros(1,3) Gamad0(3,2); zeros(1,3) Gamad0(4,2)];  
 GQ=Gamad*Q*Gamad';
 I=eye(4);
-
-y(1)=pi/2; %condições iniciais
-y(2)=0; %condições iniciais
-y(3)=0; %condições iniciais
-y(4)=0;
 
 
 xest(1,1:4)=0;
